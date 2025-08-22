@@ -8,28 +8,55 @@ repo_url: https://github.com/bewithdhanu/spotify-to-youtube-music
 edit_uri: edit/main/docs/
 
 theme:
-  name: readthedocs
-  highlightjs: true
-  hljs_languages: []
-  include_homepage_in_sidebar: true
-  prev_next_buttons_location: bottom
-  navigation_depth: 4
-  titles_only: false
-  sticky_navigation: true
-
-extra_css:
-  - stylesheets/extra.css
+  name: material
+  palette:
+    # Palette toggle for automatic light/dark mode based on system preference
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for automatic dark mode based on system preference
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.action.edit
+  icon:
+    repo: fontawesome/brands/github
 
 markdown_extensions:
-  - codehilite:
-      guess_lang: false
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
   - admonition
-  - toc:
-      permalink: true
+  - pymdownx.details
+  - pymdownx.mark
+  - pymdownx.caret
+  - pymdownx.tilde
+  - pymdownx.keys
   - attr_list
-  - def_list
-  - tables
-  - fenced_code
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 nav:
   - Home: index.md
@@ -47,6 +74,11 @@ plugins:
       lang: en
 
 extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/bewithdhanu/spotify-to-youtube-music
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/spotify-youtube-transfer/
   version:
     provider: mike
 
