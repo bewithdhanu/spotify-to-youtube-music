@@ -10,10 +10,10 @@ import sys
 from typing import List, Dict, Any, Optional
 from loguru import logger
 
-from config import Config
-from spotify_client import SpotifyClient
-from youtube_music_client import YouTubeMusicClient
-from playlist_transfer import PlaylistTransfer
+from src.spotify_youtube_transfer.config import Config
+from src.spotify_youtube_transfer.spotify_client import SpotifyClient
+from src.spotify_youtube_transfer.youtube_music_client import YouTubeMusicClient
+from src.spotify_youtube_transfer.playlist_transfer import PlaylistTransfer
 
 # Configure logging
 logger.remove()

@@ -2,7 +2,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from typing import List, Dict, Any, Optional
 from loguru import logger
-from config import Config
+from .config import Config
 
 class SpotifyClient:
     """Client for interacting with Spotify API."""

@@ -8,10 +8,10 @@ for advanced automation and custom workflows.
 
 import os
 from loguru import logger
-from config import Config
-from playlist_transfer import PlaylistTransfer
-from spotify_client import SpotifyClient
-from youtube_music_client import YouTubeMusicClient
+from .config import Config
+from .playlist_transfer import PlaylistTransfer
+from .spotify_client import SpotifyClient
+from .youtube_music_client import YouTubeMusicClient
 
 def example_single_playlist_transfer():
     """Example: Transfer a single playlist."""

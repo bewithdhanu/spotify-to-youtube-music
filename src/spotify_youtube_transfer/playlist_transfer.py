@@ -5,10 +5,10 @@ import time
 import json
 from datetime import datetime
 
-from spotify_client import SpotifyClient
-from youtube_music_client import YouTubeMusicClient
-from track_matcher import TrackMatcher
-from config import Config
+from .spotify_client import SpotifyClient
+from .youtube_music_client import YouTubeMusicClient
+from .track_matcher import TrackMatcher
+from .config import Config
 
 class PlaylistTransfer:
     """Main class for transferring playlists from Spotify to YouTube Music."""

@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Optional, Tuple
 from fuzzywuzzy import fuzz, process
 from loguru import logger
-from config import Config
+from .config import Config
 import re
 
 class TrackMatcher:

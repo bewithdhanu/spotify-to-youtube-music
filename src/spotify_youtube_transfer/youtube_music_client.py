@@ -2,7 +2,7 @@ from ytmusicapi import YTMusic, OAuthCredentials
 from ytmusicapi import setup, setup_oauth
 from typing import List, Dict, Any, Optional
 from loguru import logger
-from config import Config
+from .config import Config
 import json
 import os
 from dotenv import load_dotenv
