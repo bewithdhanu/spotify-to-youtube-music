@@ -15,7 +15,8 @@ class Config:
     SPOTIFY_SCOPE = 'playlist-read-private playlist-read-collaborative user-library-read'
     
     # YouTube Music Configuration
-    YOUTUBE_MUSIC_HEADERS_PATH = os.getenv('YOUTUBE_MUSIC_HEADERS_PATH', 'youtube_headers.json')
+    YOUTUBE_CLIENT_ID = os.getenv('YOUTUBE_CLIENT_ID')
+    YOUTUBE_CLIENT_SECRET = os.getenv('YOUTUBE_CLIENT_SECRET')
     
     # Matching Configuration
     MATCH_THRESHOLD = float(os.getenv('MATCH_THRESHOLD', '0.8'))  # Fuzzy matching threshold
@@ -34,18 +35,27 @@ class Config:
     def validate_config(cls) -> Dict[str, Any]:
         """Validate required configuration values."""
         errors = []
+        warnings = []
         
+        # Spotify validation
         if not cls.SPOTIFY_CLIENT_ID:
             errors.append('SPOTIFY_CLIENT_ID is required')
         if not cls.SPOTIFY_CLIENT_SECRET:
             errors.append('SPOTIFY_CLIENT_SECRET is required')
         
-        if not os.path.exists(cls.YOUTUBE_MUSIC_HEADERS_PATH):
-            errors.append(f'YouTube Music headers file not found: {cls.YOUTUBE_MUSIC_HEADERS_PATH}')
+        # YouTube Music validation
+        oauth_path = 'oauth.json'
+        if not os.path.exists(oauth_path):
+            errors.append(f'YouTube Music OAuth file not found: {oauth_path}')
+            errors.append('Run: python -c "from ytmusicapi import setup_oauth; setup_oauth(\'oauth.json\')" to set up OAuth')
+        
+        if not cls.YOUTUBE_CLIENT_ID or not cls.YOUTUBE_CLIENT_SECRET:
+            warnings.append('YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET not set - token refresh will not be available')
         
         return {
             'valid': len(errors) == 0,
-            'errors': errors
+            'errors': errors,
+            'warnings': warnings
         }
     
     @classmethod

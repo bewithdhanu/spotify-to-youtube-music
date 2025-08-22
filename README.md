@@ -26,28 +26,37 @@
 
 ## Installation
 
-1. **Clone the repository**:
+### Quick Start
+
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/bewithdhanu/spotify-to-youtube-music.git
    cd spotify-to-youtube-music
    ```
 
-2. **Create and activate virtual environment**:
+2. **Run the setup script:**
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python setup.py
+   ```
+   This will automatically:
+   - Check Python version compatibility
+   - Create a virtual environment
+   - Install all dependencies
+   - Set up configuration files
+
+3. **Configure API credentials:**
+   Edit the generated `.env` file with your API credentials:
+   ```
+   SPOTIFY_CLIENT_ID=your_spotify_client_id
+   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+   SPOTIFY_REDIRECT_URI=http://localhost:8080/callback
+   YOUTUBE_CLIENT_ID=your_youtube_client_id
+   YOUTUBE_CLIENT_SECRET=your_youtube_client_secret
    ```
 
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Manual Installation
 
-4. **Set up environment variables**:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your API credentials
-   ```
+For detailed installation instructions, including manual setup and troubleshooting, see our comprehensive [Installation Guide](docs/installation.md).
 
 ## Setup
 
@@ -65,7 +74,7 @@
 
 ### 2. YouTube Music Setup
 
-#### Option A: OAuth2 Authentication (Recommended)
+**YouTube Music uses OAuth2 authentication for secure API access:**
 
 1. **Run the OAuth setup script**:
    ```bash
@@ -84,18 +93,6 @@
    - Automatic token refresh
    - Better security
 
-#### Option B: Browser Headers (Fallback)
-
-1. **If OAuth2 doesn't work, use browser headers**:
-   ```bash
-   python regenerate_youtube_headers.py
-   ```
-
-2. **Follow the prompts to copy headers from your browser**:
-   - Create a `headers.txt` file with raw headers from browser developer tools
-   - The script will convert them to the required JSON format
-   - A `youtube_headers.json` file will be created
-
 ### 3. Test Your Setup
 
 ```bash
@@ -104,14 +101,14 @@ python main.py test-connection
 
 ## 🚀 Usage
 
-### Test Connection
+### Quick Commands
 
+**Test connections:**
 ```bash
 python main.py test
 ```
 
-### List Playlists
-
+**List your playlists:**
 ```bash
 # List Spotify playlists
 python main.py list-spotify --limit 25
@@ -120,8 +117,7 @@ python main.py list-spotify --limit 25
 python main.py list-youtube --limit 25
 ```
 
-### Transfer to New Playlist
-
+**Transfer to new playlist:**
 ```bash
 # Transfer a playlist to a new YouTube Music playlist
 python main.py transfer SPOTIFY_PLAYLIST_ID --name "My Playlist"
@@ -133,8 +129,7 @@ python main.py transfer SPOTIFY_PLAYLIST_ID --name "My Playlist" --privacy PUBLI
 python main.py transfer liked_songs --name "My Liked Songs"
 ```
 
-### 💖 Transfer to Liked Music (New!)
-
+**Transfer to liked music:**
 ```bash
 # Transfer any playlist directly to your YouTube Music liked songs
 python main.py transfer-liked SPOTIFY_PLAYLIST_ID
@@ -143,12 +138,56 @@ python main.py transfer-liked SPOTIFY_PLAYLIST_ID
 python main.py transfer-liked liked_songs
 ```
 
-### Search and Compare
-
+**Search and compare tracks:**
 ```bash
 # Search for tracks on both platforms
 python main.py search "Bohemian Rhapsody" --limit 10
 ```
+
+### Comprehensive Usage Guide
+
+For detailed usage examples, advanced features, and Python API integration, see our [Usage Examples Documentation](docs/usage-examples.md).
+
+### Python API
+
+You can also use the tool programmatically:
+
+```python
+from src.spotify_youtube_transfer import Config, PlaylistTransfer
+
+# Initialize with configuration
+config = Config()
+transfer = PlaylistTransfer(config)
+
+# Transfer a playlist
+result = transfer.transfer_playlist(
+    spotify_playlist_name="My Playlist",
+    youtube_playlist_name="My YouTube Playlist"
+)
+```
+
+For complete API documentation, see [API Documentation](docs/api.md).
+
+## 📚 Documentation
+
+This project includes comprehensive documentation to help you get the most out of the tool:
+
+### 📖 User Documentation
+- **[Installation Guide](docs/installation.md)** - Complete setup instructions for all platforms
+- **[Usage Examples](docs/usage-examples.md)** - Practical examples and real-world scenarios
+- **[Troubleshooting](docs/troubleshooting.md)** - Solutions for common issues and FAQ
+
+### 🔧 Developer Documentation
+- **[API Documentation](docs/api.md)** - Complete Python API reference
+- **[Architecture](docs/architecture.md)** - Technical design and project structure
+
+### 🚀 Quick Links
+- **New to the tool?** Start with the [Installation Guide](docs/installation.md)
+- **Need examples?** Check [Usage Examples](docs/usage-examples.md)
+- **Having issues?** Visit [Troubleshooting](docs/troubleshooting.md)
+- **Want to integrate?** See [API Documentation](docs/api.md)
+
+All documentation is kept up-to-date and includes tested examples with expected outputs.
 
 ### Demo Mode
 
@@ -220,24 +259,52 @@ Enable debug logging for detailed information:
 python main.py --log-level DEBUG transfer-playlist YOUR_PLAYLIST_ID
 ```
 
-## File Structure
+## 📁 Project Structure
 
 ```
-Spotify-to-Youtube/
-├── main.py                 # CLI interface
-├── config.py              # Configuration management
-├── spotify_client.py      # Spotify API integration
-├── youtube_music_client.py # YouTube Music API integration
-├── track_matcher.py       # Track matching algorithm
-├── playlist_transfer.py   # Main transfer logic
-├── requirements.txt       # Python dependencies
-├── .env.example          # Environment variables template
-└── README.md             # This file
+spotify-youtube-transfer/
+├── main.py                           # Main CLI application entry point
+├── setup.py                          # Automated setup and installation
+├── requirements.txt                  # Python dependencies
+├── .env.example                      # Environment variables template
+├── .gitignore                        # Git ignore rules
+├── LICENSE                           # MIT License
+├── README.md                         # This file
+├── docs/                             # 📚 Comprehensive documentation
+│   ├── README.md                     # Documentation index
+│   ├── installation.md               # Detailed installation guide
+│   ├── usage-examples.md             # Usage examples and tutorials
+│   ├── api.md                        # API documentation
+│   ├── troubleshooting.md            # Troubleshooting and FAQ
+│   └── architecture.md               # Technical architecture
+└── src/                              # 🐍 Python source code
+    └── spotify_youtube_transfer/     # Main package
+        ├── __init__.py               # Package initialization
+        ├── config.py                 # Configuration management
+        ├── spotify_client.py         # Spotify API client
+        ├── youtube_music_client.py   # YouTube Music client
+        ├── track_matcher.py          # Track matching algorithm
+        ├── playlist_transfer.py      # Playlist transfer logic
+        └── example_usage.py          # Usage examples
 ```
+
+### Key Directories
+
+- **`src/spotify_youtube_transfer/`** - Core Python package with all functionality
+- **`docs/`** - Comprehensive documentation for users and developers
+- **Root directory** - Entry points, configuration, and project metadata
+
+### Documentation Structure
+
+Our documentation is organized for different user types:
+- **New users**: Start with `docs/installation.md`
+- **Regular users**: See `docs/usage-examples.md`
+- **Developers**: Check `docs/api.md` and `docs/architecture.md`
+- **Troubleshooting**: Visit `docs/troubleshooting.md`
 
 ## Generated Files
 
-- `youtube_headers.json`: YouTube Music authentication data
+- `oauth.json`: YouTube Music OAuth2 authentication token
 - `transfer_report_*.json`: Detailed transfer reports
 - `spotify_to_youtube.log`: Application logs (if enabled)
 - `.spotify_cache`: Spotify authentication cache

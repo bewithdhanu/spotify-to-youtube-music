@@ -1,5 +1,5 @@
 from ytmusicapi import YTMusic, OAuthCredentials
-from ytmusicapi import setup, setup_oauth
+from ytmusicapi import setup_oauth
 from typing import List, Dict, Any, Optional
 from loguru import logger
 from .config import Config
@@ -19,70 +19,50 @@ class YouTubeMusicClient:
         self._authenticate()
     
     def _authenticate(self) -> None:
-        """Authenticate with YouTube Music API using OAuth2 or fallback to headers."""
-        # Try OAuth authentication first (recommended method)
+        """Authenticate with YouTube Music API using OAuth2."""
         oauth_path = 'oauth.json'
-        if os.path.exists(oauth_path):
-            try:
-                # Load OAuth credentials from environment if available
-                client_id = os.getenv('YOUTUBE_CLIENT_ID')
-                client_secret = os.getenv('YOUTUBE_CLIENT_SECRET')
-                
-                if client_id and client_secret:
-                    # Use OAuth with credentials for token refresh
-                    oauth_credentials = OAuthCredentials(
-                        client_id=client_id,
-                        client_secret=client_secret
-                    )
-                    self.ytmusic = YTMusic(oauth_path, oauth_credentials=oauth_credentials)
-                else:
-                    # Use OAuth token file only (no refresh capability)
-                    self.ytmusic = YTMusic(oauth_path)
-                
-                # Test OAuth authentication
-                try:
-                    playlists = self.ytmusic.get_library_playlists(limit=1)
-                    logger.info("Successfully authenticated with YouTube Music using OAuth2")
-                    return
-                except Exception as e:
-                    logger.warning(f"OAuth authentication failed: {e}")
-                    logger.info("Falling back to browser headers authentication...")
-            except Exception as e:
-                logger.warning(f"OAuth setup failed: {e}")
-                logger.info("Falling back to browser headers authentication...")
         
-        # Fallback to browser headers authentication
+        if not os.path.exists(oauth_path):
+            logger.error("YouTube Music OAuth authentication file not found.")
+            logger.info("Please set up YouTube Music OAuth2 authentication:")
+            logger.info("")
+            logger.info("1. Go to Google Cloud Console (https://console.cloud.google.com/)")
+            logger.info("2. Create a project and enable YouTube Data API v3")
+            logger.info("3. Create OAuth2 credentials (TVs and Limited Input devices)")
+            logger.info("4. Add YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET to your .env file")
+            logger.info("5. Run: python -c \"from ytmusicapi import setup_oauth; setup_oauth('oauth.json')\"")
+            logger.info("6. Follow the authentication flow in your browser")
+            raise FileNotFoundError("YouTube Music OAuth authentication not configured")
+        
         try:
-            if not os.path.exists(Config.YOUTUBE_MUSIC_HEADERS_PATH):
-                logger.error(f"YouTube Music authentication failed. Neither OAuth nor headers file found.")
-                logger.info("Please set up YouTube Music authentication using one of these methods:")
-                logger.info("")
-                logger.info("METHOD 1 (Recommended): OAuth2 Authentication")
-                logger.info("1. Go to Google Cloud Console (https://console.cloud.google.com/)")
-                logger.info("2. Create a project and enable YouTube Data API v3")
-                logger.info("3. Create OAuth2 credentials (TVs and Limited Input devices)")
-                logger.info("4. Add YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET to your .env file")
-                logger.info("5. Run: python -c \"from ytmusicapi import setup_oauth; setup_oauth('oauth.json')\"")
-                logger.info("")
-                logger.info("METHOD 2 (Fallback): Browser Headers")
-                logger.info("1. Run: python regenerate_youtube_headers.py")
-                logger.info("2. Follow the instructions to copy headers from your browser")
-                raise FileNotFoundError("YouTube Music authentication not configured")
+            # Load OAuth credentials from environment if available
+            client_id = os.getenv('YOUTUBE_CLIENT_ID')
+            client_secret = os.getenv('YOUTUBE_CLIENT_SECRET')
             
-            self.ytmusic = YTMusic(Config.YOUTUBE_MUSIC_HEADERS_PATH)
+            if client_id and client_secret:
+                # Use OAuth with credentials for token refresh
+                oauth_credentials = OAuthCredentials(
+                    client_id=client_id,
+                    client_secret=client_secret
+                )
+                self.ytmusic = YTMusic(oauth_path, oauth_credentials=oauth_credentials)
+                logger.info("YouTube Music OAuth2 initialized with token refresh capability")
+            else:
+                # Use OAuth token file only (no refresh capability)
+                self.ytmusic = YTMusic(oauth_path)
+                logger.warning("YouTube Music OAuth2 initialized without refresh capability")
+                logger.warning("Add YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET to .env for token refresh")
             
-            # Test browser headers authentication
-            try:
-                playlists = self.ytmusic.get_library_playlists(limit=1)
-                logger.info("Successfully authenticated with YouTube Music using browser headers")
-            except Exception as e:
-                logger.error(f"Browser headers authentication failed: {e}")
-                logger.info("Headers may have expired. Please regenerate them using:")
-                logger.info("python regenerate_youtube_headers.py")
-                raise
+            # Test OAuth authentication
+            playlists = self.ytmusic.get_library_playlists(limit=1)
+            logger.info("Successfully authenticated with YouTube Music using OAuth2")
             
         except Exception as e:
-            logger.error(f"Failed to authenticate with YouTube Music: {e}")
+            logger.error(f"OAuth authentication failed: {e}")
+            logger.info("Please check your OAuth setup:")
+            logger.info("1. Ensure oauth.json exists and is valid")
+            logger.info("2. Check YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET in .env")
+            logger.info("3. Re-run OAuth setup if needed: python -c \"from ytmusicapi import setup_oauth; setup_oauth('oauth.json')\"")
             raise
     
     def search_song(self, query: str, limit: int = None) -> List[Dict[str, Any]]:
@@ -261,28 +241,28 @@ class YouTubeMusicClient:
             return False
     
     @staticmethod
-    def setup_authentication() -> str:
-        """Helper method to set up YouTube Music authentication."""
-        logger.info("Setting up YouTube Music authentication...")
-        logger.info("Please follow the instructions to generate headers file:")
+    def setup_oauth_authentication() -> str:
+        """Helper method to set up YouTube Music OAuth2 authentication."""
+        logger.info("Setting up YouTube Music OAuth2 authentication...")
         logger.info("")
-        logger.info("Steps to get authentication headers:")
-        logger.info("1. Open YouTube Music in your browser (https://music.youtube.com)")
-        logger.info("2. Make sure you are logged in")
-        logger.info("3. Open Developer Tools (F12 or Ctrl+Shift+I)")
-        logger.info("4. Go to the Network tab")
-        logger.info("5. Filter by '/browse' in the search bar")
-        logger.info("6. Refresh the page or click on Library")
-        logger.info("7. Find a POST request to music.youtube.com with '/browse' in the name")
-        logger.info("8. Right-click on the request and select 'Copy > Copy request headers'")
-        logger.info("9. Paste the headers when prompted below")
+        logger.info("Prerequisites:")
+        logger.info("1. Go to Google Cloud Console (https://console.cloud.google.com/)")
+        logger.info("2. Create a project and enable YouTube Data API v3")
+        logger.info("3. Create OAuth2 credentials (TVs and Limited Input devices)")
+        logger.info("4. Add YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET to your .env file")
         logger.info("")
+        logger.info("Setting up OAuth2 token...")
         
         try:
-            # This will prompt user for headers input
-            setup(filepath=Config.YOUTUBE_MUSIC_HEADERS_PATH)
-            logger.info(f"Authentication file created: {Config.YOUTUBE_MUSIC_HEADERS_PATH}")
-            return Config.YOUTUBE_MUSIC_HEADERS_PATH
+            oauth_path = 'oauth.json'
+            setup_oauth(filepath=oauth_path)
+            logger.info(f"OAuth2 authentication file created: {oauth_path}")
+            logger.info("YouTube Music OAuth2 setup completed successfully!")
+            return oauth_path
         except Exception as e:
-            logger.error(f"Failed to setup authentication: {e}")
+            logger.error(f"Failed to setup OAuth2 authentication: {e}")
+            logger.info("Make sure you have:")
+            logger.info("1. Valid Google Cloud Console project with YouTube Data API v3 enabled")
+            logger.info("2. OAuth2 credentials configured for 'TVs and Limited Input devices'")
+            logger.info("3. YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET in your .env file")
             raise
