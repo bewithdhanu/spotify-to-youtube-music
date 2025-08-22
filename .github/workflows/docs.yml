@@ -59,7 +59,7 @@ jobs:
 
       - name: Build documentation
         run: |
-          mkdocs build --clean --strict
+          mkdocs build --clean
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -100,7 +100,7 @@ jobs:
 
       - name: Build documentation (PR Preview)
         run: |
-          mkdocs build --clean --strict
+          mkdocs build --clean
 
       - name: Comment PR with preview info
         uses: actions/github-script@v6

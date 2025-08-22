@@ -66,7 +66,6 @@ nav:
     - Architecture: architecture.md
   - Help:
     - Troubleshooting: troubleshooting.md
-    - FAQ: troubleshooting.md#frequently-asked-questions
 
 plugins:
   - search:

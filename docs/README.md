@@ -153,9 +153,9 @@ This documentation follows these principles:
 We welcome improvements to the documentation! Here's how to contribute:
 
 ### Reporting Issues
-- Found outdated information? [Create an issue](../../issues/new)
-- Missing documentation? [Request new content](../../issues/new)
-- Unclear instructions? [Suggest improvements](../../issues/new)
+- Found outdated information? [Create an issue](https://github.com/bewithdhanu/spotify-to-youtube-music/issues/new)
+- Missing documentation? [Request new content](https://github.com/bewithdhanu/spotify-to-youtube-music/issues/new)
+- Unclear instructions? [Suggest improvements](https://github.com/bewithdhanu/spotify-to-youtube-music/issues/new)
 
 ### Contributing Content
 1. **Fork the repository**

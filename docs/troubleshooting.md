@@ -289,7 +289,7 @@ When reporting issues, please include:
 
 ### Support Channels
 
-- **GitHub Issues**: [Create an issue](../../issues/new)
+- **GitHub Issues**: [Create an issue](https://github.com/bewithdhanu/spotify-to-youtube-music/issues/new)
 - **Documentation**: Check the `docs/` folder
 - **Community**: GitHub Discussions
 
