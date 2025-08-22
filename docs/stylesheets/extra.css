@@ -1,0 +1,90 @@
+/* Custom blue theme for documentation */
+:root {
+  --primary-color: #60a5fa;
+  --primary-color-dark: #3b82f6;
+  --primary-color-light: #93c5fd;
+}
+
+/* Header and navigation styling */
+.wy-nav-top {
+  background-color: var(--primary-color) !important;
+}
+
+.wy-side-nav-search {
+  background-color: var(--primary-color) !important;
+}
+
+.wy-side-nav-search input[type=text] {
+  border-color: var(--primary-color-light);
+}
+
+.wy-side-nav-search input[type=text]:focus {
+  border-color: var(--primary-color-dark);
+}
+
+/* Links and buttons */
+a {
+  color: var(--primary-color-dark);
+}
+
+a:hover {
+  color: var(--primary-color);
+}
+
+.btn-neutral {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.btn-neutral:hover {
+  background-color: var(--primary-color-dark) !important;
+}
+
+/* Navigation items */
+.wy-menu-vertical a {
+  color: #404040;
+}
+
+.wy-menu-vertical a:hover {
+  background-color: var(--primary-color-light);
+  color: var(--primary-color-dark);
+}
+
+.wy-menu-vertical li.current a {
+  color: var(--primary-color-dark);
+  border-right: solid 1px var(--primary-color);
+}
+
+.wy-menu-vertical li.current > a {
+  background-color: var(--primary-color-light);
+}
+
+/* Code blocks */
+.highlight {
+  background: #f8f9fa;
+}
+
+/* Admonitions */
+.admonition.note {
+  border-left: 4px solid var(--primary-color);
+}
+
+.admonition.note .admonition-title {
+  background-color: var(--primary-color-light);
+  color: var(--primary-color-dark);
+}
+
+/* Tables */
+th {
+  background-color: var(--primary-color-light) !important;
+  color: var(--primary-color-dark) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color-light);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary-color);
+}
